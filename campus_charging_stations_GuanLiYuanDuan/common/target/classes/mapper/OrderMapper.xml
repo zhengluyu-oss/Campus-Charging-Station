@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjetc.dao.OrderMapper">
+
+    <!-- 按订单状态分页查询（active/completed/cancelled） -->
+    <select id="selectPageByOrderStatus" resultType="com.tjetc.entity.core.Orders">
+        SELECT
+            order_id,
+            user_id,
+            station_id,
+            start_time,
+            end_time,
+            duration_minutes,
+            total_amount,
+            payment_status,
+            order_status,
+            created_time
+        FROM orders
+        WHERE order_status = #{orderStatus}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 按支付状态分页查询（pending/paid/failed） -->
+    <select id="selectPageByPaymentStatus" resultType="com.tjetc.entity.core.Orders">
+        SELECT
+            order_id,
+            user_id,
+            station_id,
+            start_time,
+            end_time,
+            duration_minutes,
+            total_amount,
+            payment_status,
+            order_status,
+            created_time
+        FROM orders
+        WHERE payment_status = #{paymentStatus}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 按用户ID分页查询订单 -->
+    <select id="selectPageByUserId" resultType="com.tjetc.entity.core.Orders">
+        SELECT
+            order_id,
+            user_id,
+            station_id,
+            start_time,
+            end_time,
+            duration_minutes,
+            total_amount,
+            payment_status,
+            order_status,
+            created_time
+        FROM orders
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 按充电桩ID分页查询订单 -->
+    <select id="selectPageByStationId" resultType="com.tjetc.entity.core.Orders">
+        SELECT
+            order_id,
+            user_id,
+            station_id,
+            start_time,
+            end_time,
+            duration_minutes,
+            total_amount,
+            payment_status,
+            order_status,
+            created_time
+        FROM orders
+        WHERE station_id = #{stationId}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 按时间范围统计订单数和总金额 -->
+    <select id="countOrderDataByTimeRange" resultType="java.util.Map">
+        SELECT
+            COUNT(order_id) AS orderCount,
+            IFNULL(SUM(total_amount), 0.00) AS totalAmount
+        FROM orders
+        WHERE created_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <!-- 按用户ID查询所有订单（不分页） -->
+    <select id="selectByUserId" resultType="com.tjetc.entity.core.Orders">
+        SELECT
+            order_id,
+            user_id,
+            station_id,
+            start_time,
+            end_time,
+            duration_minutes,
+            total_amount,
+            payment_status,
+            order_status,
+            created_time
+        FROM orders
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 修正：删除了不存在的 updated_time 字段更新 -->
+    <update id="updateOrderStatusAndAmount">
+        UPDATE orders
+        SET order_status = #{orderStatus},
+            total_amount = #{totalAmount}
+        WHERE order_id = #{orderId}
+    </update>
+
+</mapper>

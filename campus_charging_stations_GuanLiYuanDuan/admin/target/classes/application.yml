@@ -1,0 +1,58 @@
+#服务器配置:
+server:
+  port: 8081
+  servlet:
+    context-path: /admin
+#spring配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/campus_charging_station?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+    #静态资源访问配置
+  web:
+    resources:
+      static-locations:
+        - classpath:/META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        #配置读取项目外资源（注意：上传文件的位置要 读取的位置要一致 file.basePath）
+        - file:F:\guochuang\my_project_useful\the_first\文件存储
+
+
+  #文件上传位置
+  servlet:
+    multipart:
+      #配置上传文件最大值
+      max-file-size: 1024MB
+      #配置请求数据最大值
+      max-request-size: 2048MB
+
+
+#mybatis-plus配置
+mybatis-plus:
+  #配置映射文件的位置 类路径下mapper目录下或者子子孙孙目录下，以.xml后缀的配置文件
+  mapper-locations: classpath*:/mapper/**/*.xml
+  #配置类型别名
+  type-aliases-package: com.tjetc.entity
+  #配置typehandler类型处理器
+  type-handlers-package: com.tjetc.handler
+  #控制台输出sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+#配置文件上传位置
+file:
+  basePath: D:/temp
+#token过期时间，单位毫秒
+jwt:
+  token:
+    expired: 36000000
+#日志配置
+logging:
+  file:
+    path: D:/temp/mylog.log  #日志文件存储路径（会在 D:/temp 下生成日志文件，记录项目运行日志）
